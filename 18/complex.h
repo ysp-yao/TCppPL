@@ -6,12 +6,12 @@ class complex {
 public:
   complex& operator+=(complex a);
 
-  complex(double r=0, double i=0):re{r}, im{i} {}
+  constexpr complex(double r=0, double i=0):re{r}, im{i} {}
 };
 
-complex operator+(complex a, complex b) {
-  return a+=b;
-}
+// complex operator+(complex a, complex b) {
+//   return a+=b;
+// }
 
 
 #endif // COMPLEX_H_
