@@ -3,3 +3,5 @@ obj
 readme
 *.vcxproj
 *.user
+.vs
+TCppPL*
