@@ -41,9 +41,3 @@ void f(Ptr<Circle> pc)
   //Ptr<Circle> pc2{ps}; // error
 }
 
-int main() {
-
-
-
-  return 0;
-}
