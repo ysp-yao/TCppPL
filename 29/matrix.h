@@ -3,6 +3,8 @@
 #include <cstddef>
 #include <type_traits>
 #include <iostream>
+#include <cassert>
+
 using namespace std;
 
 template<bool B, typename T>
@@ -34,31 +36,6 @@ namespace Matrix_impl {
   template<typename T>
   struct Matrix_init<T, 0>;
 
-  template<typename List>
-  bool check_non_jagged(const List& list)
-  {
-    auto i = list.begin();
-    for (auto j = i + 1; j != list.end(); ++j)
-      if (i->size() != j->size())
-        return false;
-    return true;
-  }
-
-  template<size_t N, typename I, typename List>
-  Enable_if<(N > 1), void> add_extents(I& first, const List& list)
-  {
-    assert(check_non_jagged(list));
-    *first = list.size();
-    add_extents<N - 1>(++first, *list.begin());
-  }
-
-  template<size_t N, typename I, typename List>
-  Enable_if<(N == 1), void> add_extents(I& first, const List& list)
-  {
-    *first++ = list.size();
-  }
-
-
   //template<size_t N, typename... Dims>
   //bool check_bounds(const Matrix_slice<N>& slice, Dims... dims)
   //{
@@ -87,6 +64,29 @@ namespace Matrix_impl {
   //  return All((Convertible<Argssize_t>() || Same<Args, slice>())...)
   //    && Some(Same<Args, slice>()...);
   //}
+  template<typename List>
+  bool check_non_jagged(const List& list)
+  {
+    auto i = list.begin();
+    for (auto j = i + 1; j != list.end(); ++j)
+      if (i->size() != j->size())
+        return false;
+    return true;
+  }
+
+  template<size_t N, typename I, typename List>
+  Enable_if<(N > 1), void> add_extents(I& first, const List& list)
+  {
+    assert(check_non_jagged(list));
+    *first = list.size();
+    add_extents<N - 1>(++first, *list.begin());
+  }
+
+  template<size_t N, typename I, typename List>
+  Enable_if<(N == 1), void> add_extents(I& first, const List& list)
+  {
+    *first++ = list.size();
+  }
 
   template<size_t N, typename List>
   array<size_t, N> derive_extents(const List& list)
@@ -95,6 +95,26 @@ namespace Matrix_impl {
     auto f = a.begin();
     add_extents<N>(f, list); // put extents from list into f[]
     return a;
+  }
+
+
+  template<typename T, typename Vec>
+  void add_list(const std::initializer_list<T>* first, const std::initializer_list<T>* last, Vec& vec)
+  {
+    for (; first!=last; ++first)
+      add_list(first−>begin(), first−>end(), vec);
+  }
+
+  template<typename T, typename Vec>
+  void add_list(const T* first, const T* last, Vec& vec)
+  {
+    vec.insert(vec.end(), first, last);
+  }
+
+  template<typename T, typename Vec>
+  void insert_flat(initializer_list<T> list, Vec& vec)
+  {
+    add_list(list.begin(), list.end(), vec);
   }
 
 } // namespace Matrix_impl
@@ -350,15 +370,15 @@ private:
 // constructors
 template<typename T, size_t N>
 Matrix<T, N>::Matrix(Matrix_initializer<T, N> init) {
-  std::cout << "Matrix(Matrix_initializer<T, N> init) : " << init.size() << "\n";
 
-//Matrix_impl::derive_extents(init);
 
-  //desc.extents = Matrix_impl::derive_extents(init);
-//Matrix_impl::derive_extents(init, desc.extents);
-//elems.reserve(desc.size);
-//Matrix_impl::insert_flat(init, elems);
-//assert(elems.size() == desc.size);
+  //Matrix_impl::derive_extents<N>(init);
+
+  desc.extents = Matrix_impl::derive_extents<N>(init);
+  elems.reserve(desc.size);
+  Matrix_impl::insert_flat(init, elems);
+  std::cout << "Matrix(Matrix_initializer<T, N> init) : " << elems.size() << "\n";
+  assert(elems.size() == desc.size);
 }
 
 template<typename T, size_t N>
