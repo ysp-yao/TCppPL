@@ -80,6 +80,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix.h" />
+    <ClInclude Include="matrix_0.h" />
+    <ClInclude Include="matrix_1.h" />
+    <ClInclude Include="matrix_n.h" />
+    <ClInclude Include="matrix_impl.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
