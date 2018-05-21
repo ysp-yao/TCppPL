@@ -15,7 +15,7 @@ int main() {
   // Matrix<double, 1> m1{ 1,2, 3,4 };
 
   //
-  // N > 1
+  // N == 2 ，从特殊化到泛化
   //
   Matrix<int, 2> m2{ {1,2,3},{11,12,13} };
   //std::cout << m1.order() <<std::endl;
