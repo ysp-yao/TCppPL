@@ -71,6 +71,10 @@
     <RemoteBuildCommandLine>make</RemoteBuildCommandLine>
     <RemoteBuildOutputs>/home/pi/TCppPL/29/bin/29</RemoteBuildOutputs>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <RemoteBuildCommandLine>make</RemoteBuildCommandLine>
+    <RemoteBuildOutputs>/root/projects/29/bin/29</RemoteBuildOutputs>
+  </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
