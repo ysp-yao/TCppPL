@@ -144,6 +144,7 @@ using Matrix_initializer = typename Matrix_impl::Matrix_init<T, N>::type;
 template<typename T, size_t N>
 class Matrix : public Matrix_base<T,N> {
 public:
+
   //static constexpr size_t order = N;
   using value_type = T;
   using iterator = typename std::vector<T>::iterator;
@@ -353,16 +354,29 @@ template<typename T, size_t N>
   }
 
 
+
+//
+// 概念
+//
+template<typename T>
+constexpr bool Matrix_type() {
+  return false;
+}
+
+
+
+
+
 //
 // 输出函数
 //
-//template<typename M>
-//Enable_if<Matrix_type<M>(), ostream&>
-//operator<<(ostream& os, const M& m) {
-//  os << '{';
-//  for (size_t i=0; i!=rows(m); ++i) {
-//    os << m[i];
-//    if (i+1!=rows(m)) os << ',';
-//  }
-//  return os << '}';
-//}
+template<typename M>
+Enable_if<Matrix_type<M>(), std::ostream&>
+operator<<(std::ostream& os, const M& m) {
+  //os << '{';
+  //for (size_t i=0; i!=rows(m); ++i) {
+  //  os << m[i];
+  //  if (i+1!=rows(m)) os << ',';
+  //}
+  return os << '}';
+}

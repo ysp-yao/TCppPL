@@ -28,6 +28,7 @@ int main() {
   Matrix_ref<int, 1> mf1 = m2[0];
 
 
+  //std::cout << m2;
 
 
   //std::cout << m1.order() <<std::endl;
